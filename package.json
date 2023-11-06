@@ -1,0 +1,11 @@
+{
+  "name": "purematch",
+  "version": "1.0.0",
+  "description": "PureMatch Backend Intern Challenge",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Shahmar Aliyev",
+  "license": "ISC"
+}
