@@ -1,10 +1,12 @@
 const express = require('express');
+const dotenv = require('dotenv').config();
 const app = express();
 const authRouter = require('./routes/authRouter');
+const { dbConnection } = require('./models/sequelizeConfig');
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 //setup environement variables
-const dotenv = require('dotenv').config();
 
 app.use('/auth', authRouter);
 
@@ -23,7 +25,7 @@ app.use((err, req, res, next) => {
   console.log(errorObj.log);
   return res.status(errorObj.status).json(errorObj.message);
 });
-
 const server = app.listen(3000 || process.env.BACKEND_PORT, () => {
   console.log('Server started on port ' + process.env.BACKEND_PORT);
 });
+// dbConnection();
