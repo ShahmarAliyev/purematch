@@ -1,7 +1,6 @@
 //library/package imports
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const multer = require('multer');
 const dotenv = require('dotenv').config();
 
 //local imports
@@ -10,7 +9,6 @@ const postRouter = require('./routes/postRouter');
 const { dbConnection } = require('./models/sequelizeConfig');
 
 //app setup
-const upload = multer({ dest: 'uploads/' });
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

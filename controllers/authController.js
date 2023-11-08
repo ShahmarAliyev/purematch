@@ -6,7 +6,6 @@ const { createJWTToken } = require('../utils/jwtToken');
 
 authController.register = async (req, res, next) => {
   const { name, email, password } = req.body;
-  console.log(name, email, password);
   //add logic to see if user is registered already
   try {
     const salt = await bcrypt.genSalt();
@@ -32,7 +31,6 @@ authController.login = async (req, res, next) => {
   const { email, password } = req.body;
   try {
     const foundUser = await UserModel.findOne({ where: { email } });
-    console.log('foundUser name', foundUser.name);
     if (foundUser === null) {
       return res.status(401).json('Wrong email or password');
     } else {
@@ -50,7 +48,6 @@ authController.login = async (req, res, next) => {
       }
     }
   } catch (error) {
-    console.log('before catch next');
     return next({
       log: 'Express error handler caught authController.login middleware error',
       status: 401,
@@ -85,9 +82,6 @@ authController.authenticate = async (req, res, next) => {
         message: { err: 'Internal server error while fetching user data' },
       });
     }
-
-    {
-    }
   } else {
     //no token sent with cookies
     return next({
@@ -96,7 +90,6 @@ authController.authenticate = async (req, res, next) => {
       message: { err: 'Could not find the authentication token' },
     });
   }
-  return next();
 };
 
 module.exports = authController;
