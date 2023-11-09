@@ -6,29 +6,43 @@ const { createJWTToken } = require('../utils/jwtToken');
 
 authController.register = async (req, res, next) => {
   const { name, email, password } = req.body;
-  //add logic to see if user is registered already
+  if (!name || !email || !password) {
+    return res.status(400).json('Missing or Invalid fields');
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return res.status(400).json('Wrong email format');
+  }
   try {
-    const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(password, salt);
-    const newUser = await UserModel.create({
-      name,
-      email,
-      password: hashedPassword,
-    });
-    res.locals.user = { name: newUser.name, email: newUser.email };
+    //check if user exist with same email
+    const dbUser = await UserModel.findOne({ where: { email } });
+    if (dbUser) {
+      return res.status(409).json('User with this email already exists');
+    } else {
+      const salt = await bcrypt.genSalt();
+      const hashedPassword = await bcrypt.hash(password, salt);
+      const newUser = await UserModel.create({
+        name,
+        email,
+        password: hashedPassword,
+      });
+      res.locals.user = { name: newUser.name, email: newUser.email };
+      return next();
+    }
   } catch (error) {
     return next({
-      //look at status codes
-      log: 'Express error handler caught authController.register middleware error',
-      status: 409,
-      message: { err: 'Could not create new user' },
+      log:
+        'Express error handler caught authController.register middleware error. Error: ' +
+        err.message,
+      status: 500,
+      message: { err: 'Something went wrong while creating new user' },
     });
   }
-
-  return next();
 };
 authController.login = async (req, res, next) => {
   const { email, password } = req.body;
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return res.status(400).json('Wrong email format');
+  }
   try {
     const foundUser = await UserModel.findOne({ where: { email } });
     if (foundUser === null) {
@@ -50,8 +64,8 @@ authController.login = async (req, res, next) => {
   } catch (error) {
     return next({
       log: 'Express error handler caught authController.login middleware error',
-      status: 401,
-      message: { err: 'Could not log in the user' },
+      status: 500,
+      message: 'Something went wrong while logging in the user',
     });
   }
   return next();
@@ -79,7 +93,7 @@ authController.authenticate = async (req, res, next) => {
       return next({
         log: 'Express error handler caught authController.authenticate middleware error',
         status: 500,
-        message: { err: 'Internal server error while fetching user data' },
+        message: { err: 'Something went wrong while authenticating user' },
       });
     }
   } else {
