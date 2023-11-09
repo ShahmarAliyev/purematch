@@ -3,10 +3,9 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv').config();
 
-//local imports
+//local/module imports
 const authRouter = require('./routes/authRouter');
 const postRouter = require('./routes/postRouter');
-const { dbConnection } = require('./models/sequelizeConfig');
 
 //app setup
 const app = express();
@@ -14,7 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 
-//routes
+//route handling
 app.use('/post', postRouter);
 app.use('/auth', authRouter);
 app.get('/', (req, res) => {
@@ -36,4 +35,3 @@ app.use((err, req, res, next) => {
 const server = app.listen(3000 || process.env.BACKEND_PORT, () => {
   console.log('Server started on port ' + process.env.BACKEND_PORT);
 });
-// dbConnection();

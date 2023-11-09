@@ -32,7 +32,7 @@ User.hasMany(Post, {
 });
 Post.belongsTo(User);
 (async () => {
-  await sequelize.sync({ alter: true });
+  await sequelize.sync({ force: true });
 })();
 
 module.exports = Post;
