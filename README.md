@@ -25,8 +25,10 @@ In the picture below you can see the created at field with moment library. Also 
 
 ## 4th Subtask
 
-Created new route, controller to update the post. Assuming that user is authenticated with jwt token that comes from cookies. As you can see, once user provides required values for update, they get updated on the database as well.
+Created new route, controller to update the post. Assuming that user is authenticated with jwt token that comes from cookies. As you can see, once user provides required values for update, they get updated on the database as well. And as in every other request Jwt Token is included in the Cookie Headers for authentication.
 
 ![alt text](https://i.ibb.co/4Z2F6dN/updatepost.png)
+
+![alt text](https://i.ibb.co/NCPWXdQ/Screenshot-2023-11-09-at-12-59-57-AM.png)
 
 ![alt text](https://i.ibb.co/26B6nH2/newdb.png)
