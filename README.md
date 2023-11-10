@@ -8,7 +8,7 @@ This is a mock backend api made for PureMatch challenge.
 
 I added pagination to posts. Now users can request how many posts they wanna see per page, and which page they wanna see.
 
-![alt text](https://imgur.com/AcgDJjI)
+![alt text](https://i.imgur.com/AcgDJjI.png)
 
 ## 2nd Subtask
 
