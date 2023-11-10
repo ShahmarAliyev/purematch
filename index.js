@@ -37,3 +37,4 @@ app.use((err, req, res, next) => {
 const server = app.listen(3000 || process.env.BACKEND_PORT, () => {
   console.log('Server started on port ' + process.env.BACKEND_PORT);
 });
+module.exports = { server, app };
