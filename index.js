@@ -6,6 +6,7 @@ const dotenv = require('dotenv').config();
 //local/module imports
 const authRouter = require('./routes/authRouter');
 const postRouter = require('./routes/postRouter');
+const friendsRouter = require('./routes/friendsRouter');
 
 //app setup
 const app = express();
@@ -16,8 +17,9 @@ app.use(cookieParser());
 //route handling
 app.use('/post', postRouter);
 app.use('/auth', authRouter);
+app.use('/friends', friendsRouter);
 app.get('/', (req, res) => {
-  res.status(200).json('Hello World');
+  return res.status(200).json('Hello World');
 });
 
 //global error handler
@@ -25,7 +27,7 @@ app.use((err, req, res, next) => {
   const defaultErr = {
     log: 'Express error handler caught unknown middleware error',
     status: 400,
-    message: { err: 'An error occurred' },
+    message: { error: 'An error occurred' },
   };
   const errorObj = Object.assign(defaultErr, err);
   console.log(errorObj.log);

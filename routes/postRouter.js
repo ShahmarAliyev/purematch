@@ -1,11 +1,13 @@
+//setup & imports
 const express = require('express');
-const postController = require('../controllers/postController');
-const authController = require('../controllers/authController');
-const postRouter = express.Router();
 const multer = require('multer');
-
+const postRouter = express.Router();
 const upload = multer({ dest: 'uploads/' });
 
+const postController = require('../controllers/postController');
+const authController = require('../controllers/authController');
+
+//route endpoints
 postRouter.post(
   '/',
   authController.authenticate,
@@ -25,4 +27,14 @@ postRouter.put(
     return res.status(200).json(updatedPost);
   }
 );
+
+postRouter.get(
+  '/',
+  authController.authenticate,
+  postController.getPosts,
+  (req, res) => {
+    return res.status(200).json(res.locals.posts);
+  }
+);
+//exports
 module.exports = postRouter;
