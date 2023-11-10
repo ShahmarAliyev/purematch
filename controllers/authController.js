@@ -3,7 +3,7 @@ const authController = {};
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { createJWTToken } = require('../utils/jwtToken');
-const { verifyEmail } = require('../utils/verify');
+const verify = require('../utils/verify');
 
 authController.register = async (req, res, next) => {
   const { name, email, password } = req.body;
@@ -11,7 +11,7 @@ authController.register = async (req, res, next) => {
   if (!name || !email || !password) {
     return res.status(400).json({ error: 'Missing or Invalid fields' });
   }
-  if (!verifyEmail(email)) {
+  if (!verify.verifyEmail(email)) {
     return res.status(400).json({ error: 'Wrong email format' });
   }
   try {
@@ -46,7 +46,7 @@ authController.register = async (req, res, next) => {
 };
 authController.login = async (req, res, next) => {
   const { email, password } = req.body;
-  if (!verifyEmail(email)) {
+  if (!verify.verifyEmail(email)) {
     return res.status(400).json({ error: 'Wrong email format' });
   }
   try {
