@@ -11,7 +11,7 @@ const uploadFile = require('../utils/aws-s3');
 const postController = {};
 
 postController.verifyFileCount = (req, res, next) => {
-  if (req.files.length > 1) {
+  if (req.files.length > 5) {
     //if users upload more than 5, all the uploadings gets deleted
     //then returns the error
     const directory = 'uploads';
