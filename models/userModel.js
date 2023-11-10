@@ -20,6 +20,11 @@ const User = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    friendList: {
+      type: DataTypes.ARRAY(DataTypes.JSON),
+      defaultValue: [],
+      allowNull: false,
+    },
   },
   {
     timestamps: true,

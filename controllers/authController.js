@@ -32,9 +32,9 @@ authController.register = async (req, res, next) => {
     return next({
       log:
         'Express error handler caught authController.register middleware error. Error: ' +
-        err.message,
+        error.message,
       status: 500,
-      message: { err: 'Something went wrong while creating new user' },
+      message: { error: 'Something went wrong while creating new user' },
     });
   }
 };
@@ -63,7 +63,9 @@ authController.login = async (req, res, next) => {
     }
   } catch (error) {
     return next({
-      log: 'Express error handler caught authController.login middleware error',
+      log:
+        'Express error handler caught authController.login middleware error. Error: ' +
+        error.message,
       status: 500,
       message: 'Something went wrong while logging in the user',
     });
@@ -86,22 +88,24 @@ authController.authenticate = async (req, res, next) => {
         return next({
           log: 'Express error handler caught authController.authenticate middleware error',
           status: 401,
-          message: { err: 'Could not find the user in the database' },
+          message: { error: 'Could not find the user in the database' },
         });
       }
     } catch (error) {
       return next({
-        log: 'Express error handler caught authController.authenticate middleware error',
+        log:
+          'Express error handler caught authController.authenticate middleware error. Error: ' +
+          error.message,
         status: 500,
-        message: { err: 'Something went wrong while authenticating user' },
+        message: { error: 'Something went wrong while authenticating user' },
       });
     }
   } else {
     //no token sent with cookies
     return next({
-      log: 'Express error handler caught authController.authenticate middleware error',
+      log: 'Express error handler caught authController.authenticate middleware error.',
       status: 401,
-      message: { err: 'Could not find the authentication token' },
+      message: { error: 'Could not find the authentication token' },
     });
   }
 };

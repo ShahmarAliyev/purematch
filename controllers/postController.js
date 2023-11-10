@@ -37,10 +37,10 @@ postController.createPost = async (req, res, next) => {
     } catch (error) {
       return next({
         log:
-          'Express error handler caught postController.createPost middleware error' +
+          'Express error handler caught postController.createPost middleware error. Error: ' +
           error.message,
         status: 500,
-        message: { err: 'Something went wrong while creating post' },
+        message: { error: 'Something went wrong while creating post' },
       });
     }
   }
@@ -56,10 +56,10 @@ postController.createPost = async (req, res, next) => {
   } catch (error) {
     return next({
       log:
-        'Express error handler caught postController.createPost middleware error' +
+        'Express error handler caught postController.createPost middleware error. Error: ' +
         error.message,
       status: 500,
-      message: { err: 'Something went wrong while creating post' },
+      message: { error: 'Something went wrong while creating post' },
     });
   }
 
@@ -95,10 +95,51 @@ postController.updatePost = async (req, res, next) => {
   } catch (error) {
     return next({
       log:
-        'Express error handler caught postController.updatePost middleware error' +
+        'Express error handler caught postController.updatePost middleware error. Error: ' +
         error.message,
       status: 500,
-      message: { err: 'Something went wrong while updating post' },
+      message: { error: 'Something went wrong while updating post' },
+    });
+  }
+  return next();
+};
+
+postController.getPosts = async (req, res, next) => {
+  const { page, limit } = req.query;
+  if (page < 1) {
+    return res.status(400).json('Page should be number that is greater than 0');
+  }
+  if (limit < 1) {
+    return res
+      .status(400)
+      .json('Limit should be number that is greater than 0');
+  }
+  const offset = (page - 1) * limit;
+  console.log(res.locals.userId);
+  const UserId = res.locals.userId;
+  try {
+    const posts = await PostModel.findAndCountAll({
+      where: { UserId },
+      offset,
+      limit,
+    });
+    if (posts.count === 0) {
+      res.status(404).json('There is no post to show');
+    }
+    if (posts.rows.length === 0) {
+      const lastPage = Math.ceil(posts.count / limit);
+      res
+        .status(404)
+        .json('Page not found or Empty. The last page is ' + lastPage);
+    }
+    res.locals.posts = posts.rows;
+  } catch (error) {
+    return next({
+      log:
+        'Express error handler caught postController.getPosts middleware error. Error: ' +
+        error.message,
+      status: 500,
+      message: { error: 'Something went fetching posts' },
     });
   }
   return next();

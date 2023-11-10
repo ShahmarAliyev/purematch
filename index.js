@@ -6,6 +6,7 @@ const dotenv = require('dotenv').config();
 //local/module imports
 const authRouter = require('./routes/authRouter');
 const postRouter = require('./routes/postRouter');
+const friendsRouter = require('./routes/friendsRouter');
 
 //app setup
 const app = express();
@@ -16,6 +17,7 @@ app.use(cookieParser());
 //route handling
 app.use('/post', postRouter);
 app.use('/auth', authRouter);
+app.use('/friends', friendsRouter);
 app.get('/', (req, res) => {
   res.status(200).json('Hello World');
 });

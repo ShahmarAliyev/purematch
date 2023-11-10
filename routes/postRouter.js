@@ -25,4 +25,13 @@ postRouter.put(
     return res.status(200).json(updatedPost);
   }
 );
+
+postRouter.get(
+  '/',
+  authController.authenticate,
+  postController.getPosts,
+  (req, res) => {
+    return res.status(200).json(res.locals.posts);
+  }
+);
 module.exports = postRouter;
