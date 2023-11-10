@@ -1,25 +1,14 @@
 # PureMatch Backend API
 
-This is a mock backend api made for PureMatch challenge.
+## Testing
 
-## Requirement3
+I added supertest and jest to test endpoints and routes. Of course test suite can be made for all endpoints, controllers and be more extensive. Here are only a few tests and their results. You can run
 
-## 1st Subtask
+```shell
+npm run test
 
-I added pagination to posts. Now users can request how many posts they wanna see per page, and which page they wanna see.
+```
 
-![alt text](https://i.imgur.com/AcgDJjI.png)
+command to run all the tests.
 
-## 2nd Subtask
-
-Users can add friends now. I created new route and controllers for adding friends. The logic works so that once you add someone as friend they will be in your friend list. You will also be in their friend list as well. In order to add a friend you need to send post request with body of the email of person that you wanna add. Post request returns the added friend.
-
-![alt text](https://i.imgur.com/XfwO9MQ.png)
-
-![alt text](https://i.imgur.com/J1EBgEb.png)
-
-## 3rd Subtask
-
-I added friendList endpoint that returns list of friends that user has. And each friend in list shows information about their name, email, posts and number of mutual friends.
-
-![alt text](https://i.imgur.com/GeESTqB.png)
+![alt text](https://i.ibb.co/nk7SsS2/Screenshot-2023-11-10-at-4-38-41-PM.png)
