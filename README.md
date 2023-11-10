@@ -11,4 +11,4 @@ npm run test
 
 command to run all the tests.
 
-![alt text](https://i.ibb.co/nk7SsS2/Screenshot-2023-11-10-at-4-38-41-PM.png)
+![alt text](https://i.postimg.cc/mrmp8C2x/Screenshot-2023-11-10-at-4-38-41-PM.png)
