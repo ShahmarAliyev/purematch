@@ -2,33 +2,24 @@
 
 This is a mock backend api made for PureMatch challenge.
 
-## Requirement2
+## Requirement3
 
 ## 1st Subtask
 
-While doing the first requirement I have already added created at property.
+I added pagination to posts. Now users can request how many posts they wanna see per page, and which page they wanna see.
+
+![alt text](https://i.ibb.co/jJW3qbb/pagination.png)
 
 ## 2nd Subtask
 
-I used moment library to generate time difference relative to post creation time.
+Users can add friends now. I created new route and controllers for adding friends. The logic works so that once you add someone as friend they will be in your friend list. You will also be in their friend list as well. In order to add a friend you need to send post request with body of the email of person that you wanna add. Post request returns the added friend.
+
+![alt text](https://i.ibb.co/L1YGhYR/addfr.png)
+
+![alt text](https://i.ibb.co/r6VTg9Y/friendb.png)
 
 ## 3rd Subtask
 
-Using multer library I changed my code so that up to 5 images can be uploaded. More than 5 images upload will result in error.
-In the picture below you can see the created at field with moment library. Also in the request body you can see 2 files are attached(up to 5). Once they are uploaded to s3, the post is also created in database as well with photo link to s3 Objects.
+I added friendList endpoint that returns list of friends that user has. And each friend in list shows information about their name, email, posts and number of mutual friends.
 
-![alt text](https://i.ibb.co/XZwsZDh/multiple.png)
-
-![alt text](https://i.ibb.co/0V2dHVB/aws.png)
-
-![alt text](https://i.ibb.co/FDR4mw0/dbold.png)
-
-## 4th Subtask
-
-Created new route, controller to update the post. Assuming that user is authenticated with jwt token that comes from cookies. As you can see, once user provides required values for update, they get updated on the database as well. And as in every other request Jwt Token is included in the Cookie Headers for authentication.
-
-![alt text](https://i.ibb.co/4Z2F6dN/updatepost.png)
-
-![alt text](https://i.ibb.co/NCPWXdQ/Screenshot-2023-11-09-at-12-59-57-AM.png)
-
-![alt text](https://i.ibb.co/26B6nH2/newdb.png)
+![alt text](https://i.ibb.co/3mcyG76/friendlist.png)

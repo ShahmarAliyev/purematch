@@ -19,7 +19,7 @@ app.use('/post', postRouter);
 app.use('/auth', authRouter);
 app.use('/friends', friendsRouter);
 app.get('/', (req, res) => {
-  res.status(200).json('Hello World');
+  return res.status(200).json('Hello World');
 });
 
 //global error handler
