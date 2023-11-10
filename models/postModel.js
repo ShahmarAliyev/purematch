@@ -14,7 +14,7 @@ const Post = sequelize.define(
       allowNull: false,
     },
     photo: {
-      type: DataTypes.STRING,
+      type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: false,
     },
   },
@@ -32,7 +32,7 @@ User.hasMany(Post, {
 });
 Post.belongsTo(User);
 (async () => {
-  await sequelize.sync({ force: true });
+  await sequelize.sync({ alter: true });
 })();
 
 module.exports = Post;

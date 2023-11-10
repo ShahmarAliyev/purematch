@@ -9,11 +9,20 @@ const upload = multer({ dest: 'uploads/' });
 postRouter.post(
   '/',
   authController.authenticate,
-  upload.single('img'),
+  upload.array('img'),
+  postController.verifyFileCount,
   postController.createPost,
   (req, res) => {
     return res.status(200).json(res.locals.post);
   }
 );
-
+postRouter.put(
+  '/:postId',
+  authController.authenticate,
+  postController.updatePost,
+  (req, res) => {
+    const { updatedPost } = res.locals;
+    return res.status(200).json(updatedPost);
+  }
+);
 module.exports = postRouter;
