@@ -1,5 +1,6 @@
 //imports && setup
 const fs = require('fs');
+const path = require('path');
 const util = require('util');
 const PostModel = require('../models/postModel');
 const moment = require('moment');
@@ -10,7 +11,27 @@ const uploadFile = require('../utils/aws-s3');
 const postController = {};
 
 postController.verifyFileCount = (req, res, next) => {
-  if (req.files.length > 5) {
+  if (req.files.length > 1) {
+    //if users upload more than 5, all the uploadings gets deleted
+    //then returns the error
+    const directory = 'uploads';
+    fs.readdir(directory, (err, files) => {
+      if (err) throw err;
+
+      for (const file of files) {
+        fs.unlink(path.join(directory, file), (error) => {
+          if (error) {
+            return next({
+              log:
+                'Express error handler caught postController.verifyFileCount middleware error. Error: ' +
+                error.message,
+              status: 500,
+              message: { error: 'Something went wrong while creating post' },
+            });
+          }
+        });
+      }
+    });
     return res.status(400).json({ error: 'Up to 5 images allowed.' });
   }
   return next();
