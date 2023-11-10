@@ -1,5 +1,8 @@
-const { Sequelize, Model, DataTypes } = require('sequelize');
+//imports
+const { DataTypes } = require('sequelize');
 const { sequelize } = require('./sequelizeConfig');
+
+//user model schema
 const User = sequelize.define(
   'User',
   {
@@ -32,4 +35,5 @@ const User = sequelize.define(
   }
 );
 
+//exports
 module.exports = User;

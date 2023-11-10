@@ -1,6 +1,9 @@
-const { Sequelize, Model, DataTypes, UUIDV4 } = require('sequelize');
+//imports
+const { DataTypes } = require('sequelize');
 const { sequelize } = require('./sequelizeConfig');
 const User = require('./userModel');
+
+//post model schema
 const Post = sequelize.define(
   'Post',
   {
@@ -24,6 +27,7 @@ const Post = sequelize.define(
   }
 );
 
+//associations
 User.hasMany(Post, {
   foreignKey: {
     type: DataTypes.UUID,
@@ -35,4 +39,5 @@ Post.belongsTo(User);
   await sequelize.sync({ alter: true });
 })();
 
+//exports
 module.exports = Post;

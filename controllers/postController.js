@@ -1,38 +1,58 @@
-const PostModel = require('../models/postModel');
-const uploadFile = require('../utils/aws-s3');
+//imports && setup
 const fs = require('fs');
 const util = require('util');
-const unlinkFile = util.promisify(fs.unlink);
+const PostModel = require('../models/postModel');
 const moment = require('moment');
+const unlinkFile = util.promisify(fs.unlink);
+const uploadFile = require('../utils/aws-s3');
 
+// controller functions
 const postController = {};
+
 postController.verifyFileCount = (req, res, next) => {
   if (req.files.length > 5) {
-    return res.status(400).json('Up to 5 images allowed.');
+    return res.status(400).json({ error: 'Up to 5 images allowed.' });
   }
   return next();
 };
+
 postController.createPost = async (req, res, next) => {
-  let uploadings = req.files;
-  console.log(uploadings);
+  const uploadings = req.files;
+  if (!uploadings) {
+    return res
+      .status(400)
+      .json({ error: 'File or Files are required for a post' });
+  }
   uploadings.forEach((file) => {
     if (file === undefined) {
-      return res.status(400).json('An image file is required to create a post');
+      return res
+        .status(400)
+        .json({ error: 'An image file is required to create a post' });
     }
     if (file.mimetype !== 'image/jpeg') {
-      return res.status(415).json('Supported file type is image/jpeg');
+      return res
+        .status(415)
+        .json({ error: 'Supported file type is image/jpeg' });
     }
   });
   const { desc } = req.body;
   if (desc === undefined || desc.length === 0) {
-    return res.status(400).json('Post needs a description');
+    return res.status(400).json({ error: 'Post needs a description' });
   }
   const userId = res.locals.userId;
   const photos = [];
   for (const file of uploadings) {
     try {
+      //for each file in uploads upload them s3 first
       const result = await uploadFile(file);
+      if (!result) {
+        return res
+          .status(500)
+          .json({ error: 'Something went wrong while uploading to S3 bucket' });
+      }
+      //once files are uploaded delete them from server
       await unlinkFile(file.path);
+      //add the s3 url for the file to an array which will be value of photos in the newpost
       photos.push(result.Location);
     } catch (error) {
       return next({
@@ -65,22 +85,27 @@ postController.createPost = async (req, res, next) => {
 
   return next();
 };
+
 postController.updatePost = async (req, res, next) => {
   const UserId = res.locals.userId;
   const postID = req.params.postId;
   const postDesc = req.body.desc;
   if (!postID) {
-    return res.status(400).json('Post id is required for update ');
+    return res.status(400).json({ error: 'Post id is required for update ' });
   }
   if (!postDesc) {
-    return res.status(400).json('Post description is required for update');
+    return res
+      .status(400)
+      .json({ error: 'Post description is required for update' });
   }
   try {
     const oldPost = await PostModel.findOne({
       where: { UserId, postId: postID },
     });
     if (!oldPost) {
-      return res.status(404).json('Could not find the post in database');
+      return res
+        .status(404)
+        .json({ error: 'Could not find the post in database' });
     }
     const updatedPost = await oldPost.update({ description: postDesc });
 
@@ -107,7 +132,9 @@ postController.updatePost = async (req, res, next) => {
 postController.getPosts = async (req, res, next) => {
   const { page, limit } = req.query;
   if (page < 1) {
-    return res.status(400).json('Page should be number that is greater than 0');
+    return res
+      .status(400)
+      .json({ error: 'Page should be number that is greater than 0' });
   }
   if (limit < 1) {
     return res
@@ -115,7 +142,6 @@ postController.getPosts = async (req, res, next) => {
       .json('Limit should be number that is greater than 0');
   }
   const offset = (page - 1) * limit;
-  console.log(res.locals.userId);
   const UserId = res.locals.userId;
   try {
     const posts = await PostModel.findAndCountAll({
@@ -124,13 +150,15 @@ postController.getPosts = async (req, res, next) => {
       limit,
     });
     if (posts.count === 0) {
-      res.status(404).json('There is no post to show');
+      //no posts found
+      return res.status(404).json({ error: 'There is no post to show' });
     }
     if (posts.rows.length === 0) {
+      //posts found but user is looking for wrong page
       const lastPage = Math.ceil(posts.count / limit);
-      res
-        .status(404)
-        .json('Page not found or Empty. The last page is ' + lastPage);
+      return res.status(404).json({
+        error: `Page not found or Empty. The last page is ${lastPage}`,
+      });
     }
     res.locals.posts = posts.rows;
   } catch (error) {
@@ -145,4 +173,5 @@ postController.getPosts = async (req, res, next) => {
   return next();
 };
 
+//exports
 module.exports = postController;

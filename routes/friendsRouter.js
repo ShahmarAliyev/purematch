@@ -1,8 +1,11 @@
+//setup & imports
 const express = require('express');
-const friendsController = require('../controllers/friendsController');
-const authController = require('../controllers/authController');
 const friendsRouter = express.Router();
 
+const friendsController = require('../controllers/friendsController');
+const authController = require('../controllers/authController');
+
+//route endpoints
 friendsRouter.post(
   '/add',
   authController.authenticate,
@@ -21,4 +24,6 @@ friendsRouter.post(
     res.status(200).json(res.locals.friendList);
   }
 );
+
+//exports
 module.exports = friendsRouter;

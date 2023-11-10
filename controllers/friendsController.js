@@ -16,7 +16,7 @@ friendsController.addFriend = async (req, res, next) => {
       where: { UserId: friend.id },
     });
     if (!friend) {
-      return res.status(404).json('Could not find the friend ');
+      return res.status(404).json({ error: 'Could not find the friend ' });
     }
     const userInFriends = {
       friendName: user.name,
@@ -40,8 +40,9 @@ friendsController.addFriend = async (req, res, next) => {
       updatedFriend,
     ]);
     if (!finalUser || !finalFriend) {
-      //cehck all return res.status
-      return res.status(400).json('Something went wrong while adding friend');
+      return res
+        .status(400)
+        .json({ error: 'Something went wrong while adding friend' });
     }
     res.locals.addedFriend =
       finalUser.friendList[finalUser.friendList.length - 1];
